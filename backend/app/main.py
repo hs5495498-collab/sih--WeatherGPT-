@@ -1,13 +1,30 @@
 from fastapi import FastAPI
 
-app = FastAPI(title="WeatherGPT API")
+from app.core.config import settings
+from app.routers import weather, location
 
+
+app = FastAPI(
+    title=settings.APP_NAME,
+    version=settings.APP_VERSION,
+    debug=settings.DEBUG
+)
+
+app.include_router(weather.router)
+app.include_router(location.router)
 
 @app.get("/")
-def read_root():
-    return {"message": "WeatherGPT Backend is running"}
+async def root():
+    return {
+        "message": "Welcome to WeatherGPT API",
+        "status": "running"
+    }
 
 
 @app.get("/health")
-def health_check():
-    return {"status": "healthy"}
+async def health_check():
+    return {
+        "status": "healthy",
+        "service": settings.APP_NAME,
+        "version": settings.APP_VERSION
+    }

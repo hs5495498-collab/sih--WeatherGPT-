@@ -1,16 +1,20 @@
-# Virtual environment
+# Virtual Environment
 venv/
-env/
 .venv/
 
-# Environment variables
+# Environment Variables
 .env
 
-# Python cache
+# Python
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
 
-# OS files
+# IDE
+.vscode/
+.idea/
+
+# Testing
+.pytest_cache/
+
+# OS
 .DS_Store
