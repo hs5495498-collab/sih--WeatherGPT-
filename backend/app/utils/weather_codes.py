@@ -1,3 +1,5 @@
+from typing import Any
+
 WEATHER_CODES = {
     0: {
         "condition": "Clear",
@@ -106,13 +108,19 @@ WEATHER_CODES = {
     }
 }
 
+DEFAULT_WEATHER_INFO = {
+    "condition": "Unknown",
+    "description": "Weather information unavailable",
+    "icon": "unknown"
+}
 
-def get_weather_info(weather_code: int):
+
+def get_weather_info(weather_code: int) -> dict[str, Any]:
+    """
+    Convert an Open-Meteo weather code into readable weather information.
+    """
+
     return WEATHER_CODES.get(
         weather_code,
-        {
-            "condition": "Unknown",
-            "description": "Weather information unavailable",
-            "icon": "unknown"
-        }
+        DEFAULT_WEATHER_INFO
     )

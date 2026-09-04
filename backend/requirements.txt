@@ -3,3 +3,6 @@ uvicorn[standard]
 pydantic
 pydantic-settings
 httpx
+supabase
+google-genai
+pytest
