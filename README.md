@@ -548,22 +548,6 @@ flutter test
 
 ---
 
-## 🎬 Demo Video
-
-**5-Minute Demo Script**:
-
-1. **Onboarding** (0:00–0:30): Language selection → Location permission
-2. **Home Screen** (0:30–1:00): Weather dashboard (32°C, partly cloudy)
-3. **Chat** (1:00–1:30): Ask in Hindi → Get Hindi response (text + voice)
-4. **Offline Mode** (1:30–2:00): Turn off WiFi → Show cached data
-5. **SOS** (2:00–2:30): Long-press → SMS with location link
-6. **Crops** (2:30–3:00): Select wheat → Flowering stage → Advisory
-7. **Schemes** (3:00–3:30): PM-KISAN → Apply link
-8. **Alerts** (3:30–4:00): Heat wave alert (orange card)
-9. **Analytics** (4:00–4:30): Tap Settings 5× → PIN 1234 → Stats
-10. **Demo Mode** (4:30–5:00): Tap version 7× → Mock data banner
-
-**Upload**: YouTube (unlisted) or Google Drive
 
 ---
 
@@ -610,23 +594,6 @@ Then open a Pull Request into `develop`. Do not push directly to `main`.
 
 Example: `feat: add IMD weather API integration`
 
----
-
-## 🗓️ Timeline
-
-| Day | Date | Focus |
-|---|---|---|
-| Day 1 | 30 Aug 2026 | Kickoff, study PS68 spec, task allocation, environment setup |
-| Day 2–6 | 31 Aug – 5 Sep 2026 | Core development sprint — NLP pipeline, weather data integration, chat UI, alerts |
-| Day 7 | 6 Sep 2026 | **Final Presentation** |
-
----
-
-## 📄 License
-
-MIT License — see [LICENSE](LICENSE) file for details.
-
----
 
 ## 🙏 Acknowledgments
 
@@ -645,9 +612,3 @@ MIT License — see [LICENSE](LICENSE) file for details.
 - **GitHub**: [https://github.com/yourteam/weathergpt](https://github.com/hs5495498-collab/sih--WeatherGPT-)
 - **Email**: hs5495498@gmail.com
 - **Pitch Deck**: [Google Slides/PPT link]
-
----
-
-**Built with ❤️ for 300 million Indian farmers**
-
-**Smart India Hackathon 2026 · Team Algo-Avengers**
