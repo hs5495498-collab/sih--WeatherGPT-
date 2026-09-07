@@ -49,3 +49,122 @@ node_modules/
 .pub/
 /build/
 /coverage/
+
+# ==========================================================
+# WeatherGPT — Frontend/.gitignore
+# Consolidated: replaces android/, ios/, linux/, macos/,
+# windows/ nested .gitignore files.
+# ==========================================================
+
+# Secrets — never commit these
+.env
+.env.*
+*.pem
+*.key
+secrets.json
+service-account*.json
+
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IDE / editor
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# Flutter / Dart / Pub
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+/coverage/
+app.*.symbols
+app.*.map.json
+.widget_preview/
+
+# ===================== ANDROID =====================
+android/**/gradle-wrapper.jar
+android/.gradle
+android/captures/
+android/gradlew
+android/gradlew.bat
+android/local.properties
+android/**/GeneratedPluginRegistrant.java
+android/**/.cxx/
+android/build/
+android/**/key.properties
+android/**/*.keystore
+android/**/*.jks
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# ===================== iOS =====================
+ios/**/dgph
+ios/**/*.mode1v3
+ios/**/*.mode2v3
+ios/**/*.moved-aside
+ios/**/*.pbxuser
+ios/**/*.perspectivev3
+ios/**/*sync/
+ios/**/.sconsign.dblite
+ios/**/.tags*
+ios/**/.vagrant/
+ios/**/DerivedData/
+ios/**/Icon?
+ios/**/Pods/
+ios/**/.symlinks/
+ios/**/profile
+ios/**/xcuserdata
+ios/**/.generated/
+ios/Flutter/App.framework
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/Flutter/Generated.xcconfig
+ios/Flutter/ephemeral/
+ios/Flutter/app.flx
+ios/Flutter/app.zip
+ios/Flutter/flutter_assets/
+ios/Flutter/flutter_export_environment.sh
+ios/ServiceDefinitions.json
+ios/Runner/GeneratedPluginRegistrant.*
+!ios/**/default.mode1v3
+!ios/**/default.mode2v3
+!ios/**/default.pbxuser
+!ios/**/default.perspectivev3
+
+# ===================== LINUX =====================
+linux/flutter/ephemeral/
+
+# ===================== MACOS =====================
+macos/**/Flutter/ephemeral/
+macos/**/Pods/
+macos/**/dgph
+macos/**/xcuserdata/
+
+# ===================== WINDOWS =====================
+windows/flutter/ephemeral/
+windows/**/*.suo
+windows/**/*.user
+windows/**/*.userosscache
+windows/**/*.sln.docstates
+windows/**/x64/
+windows/**/x86/
+windows/**/*.[Cc]ache
+!windows/**/*.[Cc]ache/
