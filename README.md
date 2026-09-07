@@ -4,7 +4,6 @@
 
 [![SIH 2026](https://img.shields.io/badge/SIH-2026-orange.svg)](https://sih.gov.in)
 [![Languages](https://img.shields.io/badge/Languages-9-blue.svg)](#)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Smart India Hackathon 2026 submission by **Team Algo-Avengers**
 Final Presentation: **6 September 2026**
