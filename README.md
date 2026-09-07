@@ -14,7 +14,7 @@
 | **PS ID** | SIH26068 |
 | **Title** | WeatherGPT: Conversational AI for Weather Forecasting, Alerts, and Climate Information |
 | **Category** | Software |
-| **Theme** | Space Technology / Disaster Management |
+| **Theme** | Disaster Management |
 | **Sponsoring Ministry** | Ministry of Earth Sciences (MoES) |
 
 ---
