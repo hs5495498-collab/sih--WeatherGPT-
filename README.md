@@ -111,6 +111,9 @@ OPENWEATHER_API_KEY=your_openweathermap_key
 
 ## 📁 Folder Structure
 ### Backend Structure
+### Backend Structure
+
+```text
 weathergpt-backend-v3/
 ├── .env.example
 ├── .gitignore
@@ -118,78 +121,79 @@ weathergpt-backend-v3/
 ├── railway.json
 ├── requirements.txt
 ├── pytest.ini
-├── app/
-│   ├── main.py
-│   ├── state.py
-│   ├── core/
-│   │   ├── config.py
-│   │   ├── exceptions.py
-│   │   ├── exception_handlers.py
-│   │   ├── logging_config.py
-│   │   └── middleware.py
-│   ├── dependencies/
-│   │   └── auth.py
-│   ├── routers/
-│   │   ├── advisory.py
-│   │   ├── alerts.py
-│   │   ├── auth.py
-│   │   ├── chat.py
-│   │   ├── database.py
-│   │   ├── domain_advisory.py
-│   │   ├── history.py
-│   │   ├── location.py
-│   │   ├── risk.py
-│   │   ├── user_locations.py
-│   │   ├── weather.py
-│   │   └── websocket.py
-│   ├── services/
-│   │   ├── advisory_service.py
-│   │   ├── alert_poller.py
-│   │   ├── alert_service.py
-│   │   ├── auth_service.py
-│   │   ├── aviation_advisory_service.py
-│   │   ├── chat_orchestrator.py
-│   │   ├── domain_advisory_service.py
-│   │   ├── farmer_advisory_service.py
-│   │   ├── history_service.py
-│   │   ├── intent_router_service.py
-│   │   ├── location_service.py
-│   │   ├── marine_advisory_service.py
-│   │   ├── nlu_service.py
-│   │   ├── notification_service.py
-│   │   ├── outdoor_advisory_service.py
-│   │   ├── response_generator_service.py
-│   │   ├── risk_service.py
-│   │   ├── saved_location_service.py
-│   │   ├── translation_service.py
-│   │   ├── weather_service.py
-│   │   └── websocket_manager.py
-│   ├── repositories/
-│   │   ├── chat_repository.py
-│   │   └── saved_location_repository.py
-│   ├── schemas/
-│   │   ├── alert.py
-│   │   ├── auth.py
-│   │   ├── chat.py
-│   │   ├── history.py
-│   │   ├── location.py
-│   │   ├── saved_location.py
-│   │   └── weather.py
-│   ├── models/
-│   │   └── schemas.py
-│   └── utils/
-│       ├── helpers.py
-│       ├── time_utils.py
-│       └── weather_codes.py
-├── database/
-│   └── supabase.py
-└── tests/
-    ├── conftest.py
-    ├── test_alerts.py
-    ├── test_chat.py
-    ├── test_location.py
-    ├── test_risk.py
-    └── test_weather.py
+└── app/
+    ├── main.py
+    ├── state.py
+    ├── core/
+    │   ├── config.py
+    │   └── exceptions.py
+    │       └── exception_handlers.py
+    ├── logging_config.py
+    ├── middleware.py
+    ├── dependencies/
+    │   ├── auth.py
+    │   └── routers/
+    │       ├── advisory.py
+    │       │   └── alerts.py
+    │       ├── auth.py
+    │       ├── chat.py
+    │       ├── database.py
+    │       ├── domain_advisory.py
+    │       │   ├── history.py
+    │       │   └── location.py
+    │       │       └── risk.py
+    │       │           ├── user_locations.py
+    │       │           └── weather.py
+    │       ├── websocket.py
+    │       └── services/
+    │           ├── advisory_service.py
+    │           │   ├── alert_poller.py
+    │           │   ├── alert_service.py
+    │           │   ├── auth_service.py
+    │           │   ├── aviation_advisory_service.py
+    │           │   ├── chat_orchestrator.py
+    │           │   ├── domain_advisory_service.py
+    │           │   │   ├── farmer_advisory_service.py
+    │           │   │   ├── history_service.py
+    │           │   │   └── intent_router_service.py
+    │           │   ├── location_service.py
+    │           │   │   ├── marine_advisory_service.py
+    │           │   │   ├── nlu_service.py
+    │           │   │   └── notification_service.py
+    │           │   ├── outdoor_advisory_service.py
+    │           │   ├── response_generator_service.py
+    │           │   ├── risk_service.py
+    │           │   ├── saved_location_service.py
+    │           │   │   └── translation_service.py
+    │           │   └── weather_service.py
+    │           ├── websocket_manager.py
+    │           └── repositories/
+    │               ├── chat_repository.py
+    │               ├── saved_location_repository.py
+    │               ├── schemas/
+    │               │   ├── alert.py
+    │               │   ├── auth.py
+    │               │   ├── chat.py
+    │               │   ├── history.py
+    │               │   └── location.py
+    │               │       └── saved_location.py
+    │               ├── weather.py
+    │               ├── models/
+    │               │   └── schemas.py
+    │               └── utils/
+    │                   ├── helpers.py
+    │                   └── time_utils.py
+    │                       └── weather_codes.py
+    ├── database/
+    │   └── supabase.py
+    └── tests/
+        ├── conftest.py
+        ├── test_alerts.py
+        ├── test_chat.py
+        ├── test_location.py
+        ├── test_risk.py
+        └── test_weather.py
+```
 ### Frontend Structure
 weathergpt-flutter-v3/
 ├── pubspec.yaml
