@@ -195,6 +195,9 @@ weathergpt-backend-v3/
         └── test_weather.py
 ```
 ### Frontend Structure
+### Frontend Structure
+
+```text
 weathergpt-flutter-v3/
 ├── pubspec.yaml
 └── lib/
@@ -273,20 +276,24 @@ weathergpt-flutter-v3/
         ├── weather_hero_card.dart
         ├── weather_mascot.dart
         └── weather_particles.dart
+```
 ---
 
 ## 📊 Architecture
+### System Architecture Diagram
+
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                     FLUTTER MOBILE APP                       │
 │  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐        │
 │  │   Chat   │ │   Map    │ │Dashboard │ │  Profile │        │
 │  │   UI     │ │   UI     │ │    UI    │ │    UI    │        │
 │  └──────────┘ └──────────┘ └──────────┘ └──────────┘        │
-│                                                               │
+│                                                             │
 │  ┌──────────────────────────────────────────────────────┐   │
 │  │              STATE MANAGEMENT (Provider)               │   │
 │  └──────────────────────────────────────────────────────┘   │
-│                                                               │
+│                                                             │
 │  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐        │
 │  │  TTS/STT │ │   SOS    │ │  Crop    │ │  Local   │        │
 │  │  Engine  │ │  Module  │ │  Engine  │ │   DB     │        │
@@ -301,7 +308,7 @@ weathergpt-flutter-v3/
 │  │              API GATEWAY (FastAPI)                    │   │
 │  │        Rate Limiting · Authentication · Routing       │   │
 │  └──────────────────────────────────────────────────────┘   │
-│                                                               │
+│                                                             │
 │  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐        │
 │  │  Weather │ │   Crop   │ │    AI    │ │  Alert   │        │
 │  │  Service │ │  Service │ │  Service │ │  Service │        │
@@ -322,6 +329,7 @@ weathergpt-flutter-v3/
 │                    EXTERNAL APIS                              │
 │   OpenWeatherMap · IMD · Google Maps · MyMemory · AGMARKNET  │
 └─────────────────────────────────────────────────────────────┘
+```
 ---
 
 ## 📋 Features (Deep Dive)
