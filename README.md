@@ -111,7 +111,6 @@ OPENWEATHER_API_KEY=your_openweathermap_key
 
 ## 📁 Folder Structure
 ### Backend Structure
-### Backend Structure
 
 ```text
 weathergpt-backend-v3/
@@ -194,7 +193,6 @@ weathergpt-backend-v3/
         ├── test_risk.py
         └── test_weather.py
 ```
-### Frontend Structure
 ### Frontend Structure
 
 ```text
