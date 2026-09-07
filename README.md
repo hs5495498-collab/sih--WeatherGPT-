@@ -2,7 +2,7 @@
 ### 300 million farmers. 11,000 deaths per year. One app that changes everything.
 
 > **Smart India Hackathon 2026 submission by Team Algo-Avengers**  
-> **Final Presentation**: 7 September 2026  
+> **Final Presentation**: 8 September 2026  
 > **Status**: ✅ **PRODUCTION READY** (59/59 backend tests passing, 60 Flutter files verified)
 
 ---
@@ -110,32 +110,235 @@ OPENWEATHER_API_KEY=your_openweathermap_key
 ---
 
 ## 📁 Folder Structure
-weathergpt/
-├── backend/ # FastAPI services — weather, crop, chat/AI, alerts, auth
-│ ├── app/
-│ │ ├── main.py
-│ │ ├── routers/ # HTTP endpoints (11 routers)
-│ │ ├── services/ # Business logic (20 services)
-│ │ ├── repositories/# Supabase data-access (2 repos)
-│ │ ├── schemas/ # Pydantic models (7 files)
-│ │ └── utils/
-│ ├── database/
-│ │ └── supabase.py
-│ ├── tests/ # 59 tests passing
-│ └── requirements.txt
-├── flutter_app/ # Chat UI, offline cache, SOS module, crop engine, dashboards
-│ └── lib/
-│ ├── main.dart
-│ ├── models/ # 6 model files
-│ ├── providers/ # 8 providers
-│ ├── screens/ # 20 screens
-│ ├── services/ # 17 services
-│ └── widgets/ # 14 widgets
-├── ml/ # NLP/LLM pipeline, translation, retrieval, model experiments
-├── docs/ # Problem statement, architecture diagrams, PPT, reports
-└── README.md
 
-text
+### Backend Structure
+weathergpt-backend-v3/
+├── .env.example # ✅ FIXED (RAG_ENABLED=false, all vars complete)
+├── .gitignore # ✅ Present
+├── Procfile # ✅ Present (uvicorn app.main:app --host 0.0.0.0 --port $PORT)
+├── railway.json # ✅ Present (Render deployment config)
+├── requirements.txt # ✅ FIXED (google-genai removed)
+├── pytest.ini # ✅ Present
+│
+├── app/
+│ ├── main.py # ✅ FastAPI app, CORS, router wiring, lifespan
+│ ├── state.py # ✅ FIXED (unused imports removed)
+│ │
+│ ├── core/
+│ │ ├── config.py # ✅ Settings (pydantic-settings, reads .env)
+│ │ ├── exceptions.py # ✅ AppException
+│ │ ├── exception_handlers.py # ✅ Centralized error responses
+│ │ ├── logging_config.py # ✅ Logging configuration
+│ │ └── middleware.py # ✅ Request logging middleware
+│ │
+│ ├── dependencies/
+│ │ └── auth.py # ✅ get_current_user (Supabase bearer token)
+│ │
+│ ├── routers/ # ✅ 11 HTTP endpoints (all working)
+│ │ ├── advisory.py # GET /api/v1/advisory
+│ │ ├── alerts.py # GET /api/v1/alerts
+│ │ ├── auth.py # POST /api/v1/auth/signup, /login
+│ │ ├── chat.py # POST /api/v1/chat
+│ │ ├── database.py # GET /api/v1/database/test
+│ │ ├── domain_advisory.py # GET /api/v1/domain-advisory
+│ │ ├── history.py # GET/DELETE /api/v1/history/{session_id}
+│ │ ├── location.py # location search
+│ │ ├── risk.py # GET /api/v1/risk
+│ │ ├── user_locations.py # saved locations (auth-gated)
+│ │ ├── weather.py # /current, /forecast, /by-city
+│ │ └── websocket.py # WS /ws/weather-alerts
+│ │
+│ ├── services/ # ✅ 20 business logic services (all working)
+│ │ ├── advisory_service.py
+│ │ ├── alert_poller.py # background loop pushing live alerts
+│ │ ├── alert_service.py
+│ │ ├── auth_service.py
+│ │ ├── aviation_advisory_service.py
+│ │ ├── chat_orchestrator.py # central NLU→route→response pipeline
+│ │ ├── domain_advisory_service.py
+│ │ ├── farmer_advisory_service.py
+│ │ ├── history_service.py
+│ │ ├── intent_router_service.py
+│ │ ├── location_service.py # Open-Meteo geocoding
+│ │ ├── marine_advisory_service.py
+│ │ ├── nlu_service.py # rule-based intent/location/time extraction
+│ │ ├── notification_service.py # fan-out: websocket/email/sms/push
+│ │ ├── outdoor_advisory_service.py
+│ │ ├── response_generator_service.py
+│ │ ├── risk_service.py # heat/rain/wind/flood scoring
+│ │ ├── saved_location_service.py
+│ │ ├── translation_service.py # MyMemory API wrapper
+│ │ ├── weather_service.py # Open-Meteo forecast client
+│ │ └── websocket_manager.py # connection registry by city
+│ │
+│ ├── repositories/ # ✅ 2 Supabase data-access layers (async-safe)
+│ │ ├── chat_repository.py # FIXED (wrapped in run_in_threadpool)
+│ │ └── saved_location_repository.py # FIXED (wrapped in run_in_threadpool)
+│ │
+│ ├── schemas/ # ✅ 7 Pydantic request/response models
+│ │ ├── alert.py
+│ │ ├── auth.py
+│ │ ├── chat.py
+│ │ ├── history.py
+│ │ ├── location.py
+│ │ ├── saved_location.py
+│ │ └── weather.py
+│ │
+│ ├── models/
+│ │ └── schemas.py # FIXED (id coercion: int→str)
+│ │
+│ └── utils/
+│ ├── helpers.py
+│ ├── time_utils.py # "tomorrow"/"today" → ISO date
+│ └── weather_codes.py # WMO code → condition/icon
+│
+├── database/
+│ └── supabase.py # client init, graceful no-op if unconfigured
+│
+└── tests/
+├── conftest.py # fixtures: TestClient, mock weather/location data
+├── test_alerts.py
+├── test_chat.py
+├── test_location.py
+├── test_risk.py
+└── test_weather.py # ✅ 59 tests passing
+### Frontend Structure
+weathergpt-flutter-v3/
+├── pubspec.yaml # ✅ Present (all dependencies declared)
+│
+└── lib/
+├── main.dart # ✅ entrypoint, MultiProvider wiring
+│
+├── core/
+│ └── languages.dart # ✅ supported languages, voice-guidance scripts
+│
+├── data/
+│ └── government_schemes.dart # ✅ static scheme content (10 schemes)
+│
+├── models/ # ✅ 6 plain data classes + defensive fromJson
+│ ├── chat_message.dart
+│ ├── market_price.dart
+│ ├── scheme.dart
+│ ├── sos_models.dart
+│ ├── weather_alert.dart
+│ └── weather_data.dart
+│
+├── providers/ # ✅ 8 ChangeNotifier state, one per concern
+│ ├── app_settings_provider.dart
+│ ├── auth_provider.dart # wraps Supabase auth state
+│ ├── chat_provider.dart # chat history, voice, vision integration
+│ ├── connectivity_provider.dart
+│ ├── navigation_provider.dart
+│ ├── weather_provider.dart # current weather + alerts orchestration
+│ └── weather_theme_provider.dart
+│
+├── screens/ # ✅ 20 screens (all working)
+│ ├── auth/login_screen.dart
+│ ├── alerts_dashboard_screen.dart
+│ ├── analytics_dashboard_screen.dart
+│ ├── app_drawer.dart
+│ ├── chat_screen.dart
+│ ├── dashboard_screen.dart
+│ ├── home_shell.dart # bottom-nav shell
+│ ├── market_prices_screen.dart
+│ ├── onboarding_screen.dart
+│ ├── persona_advisory_screen.dart # farmer/marine/aviation/urban advisories
+│ ├── scheme_detail_screen.dart
+│ ├── schemes_list_screen.dart
+│ ├── settings_screen.dart
+│ ├── showcase_screen.dart
+│ ├── sos_history_screen.dart
+│ ├── sos_screen.dart
+│ ├── splash_screen.dart
+│ └── weather_map_screen.dart
+│
+├── services/ # ✅ 17 I/O services (no widget code)
+│ ├── analytics_service.dart
+│ ├── api_client.dart # talks to the FastAPI backend
+│ ├── cache_service.dart # SharedPreferences offline fallback
+│ ├── demo_mode_service.dart
+│ ├── geocoding_service.dart # Nominatim search + reverse geocode
+│ ├── input_sanitizer.dart
+│ ├── location_service.dart # GPS via geolocator
+│ ├── market_price_service.dart
+│ ├── mock_data_service.dart # offline/demo fallback data
+│ ├── radar_tile_service.dart
+│ ├── rate_limiter.dart # client-side chat rate limiting
+│ ├── sos_service.dart # SMS/call handoff for emergencies
+│ ├── supabase_service.dart # Supabase client init
+│ ├── vision_inference_service.dart # on-device sky-photo classifier (tflite)
+│ └── voice_service.dart # STT/TTS
+│
+├── theme/
+│ ├── app_theme.dart
+│ └── weather_theme_spec.dart
+│
+└── widgets/ # ✅ 14 reusable UI components
+├── alert_banner.dart
+├── animated_counter.dart
+├── animated_weather_icon.dart
+├── app_logo.dart
+├── bouncy.dart
+├── chat_bubble.dart
+├── connectivity_banner.dart
+├── dynamic_weather_theme.dart
+├── pill_nav_bar.dart
+├── scroll_reveal.dart
+├── shimmer_loader.dart
+├── typing_indicator.dart
+├── weather_hero_card.dart
+├── weather_mascot.dart
+└── weather_particles.dart
+
+---
+
+## 📊 Architecture
+┌─────────────────────────────────────────────────────────────┐
+│ FLUTTER MOBILE APP │
+│ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ │
+│ │ Chat │ │ Map │ │Dashboard │ │ Profile │ │
+│ │ UI │ │ UI │ │ UI │ │ UI │ │
+│ └──────────┘ └──────────┘ └──────────┘ └──────────┘ │
+│ │
+│ ┌──────────────────────────────────────────────────────┐ │
+│ │ STATE MANAGEMENT (Provider) │ │
+│ └──────────────────────────────────────────────────────┘ │
+│ │
+│ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ │
+│ │ TTS/STT │ │ SOS │ │ Crop │ │ Local │ │
+│ │ Engine │ │ Module │ │ Engine │ │ DB │ │
+│ └──────────┘ └──────────┘ └──────────┘ └──────────┘ │
+└─────────────────────────────────────────────────────────────┘
+│
+│ HTTPS / WebSocket
+▼
+┌─────────────────────────────────────────────────────────────┐
+│ BACKEND SERVICES │
+│ ┌──────────────────────────────────────────────────────┐ │
+│ │ API GATEWAY (FastAPI) │ │
+│ │ Rate Limiting · Authentication · Routing │ │
+│ └──────────────────────────────────────────────────────┘ │
+│ │
+│ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ │
+│ │ Weather │ │ Crop │ │ AI │ │ Alert │ │
+│ │ Service │ │ Service │ │ Service │ │ Service │ │
+│ └──────────┘ └──────────┘ └──────────┘ └──────────┘ │
+└─────────────────────────────────────────────────────────────┘
+│
+▼
+┌─────────────────────────────────────────────────────────────┐
+│ DATA LAYER │
+│ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ │
+│ │PostgreSQL│ │ Redis │ │ Firebase │ │ S3 │ │
+│ │ (Main) │ │ (Cache) │ │(FCM/ML) │ │(Assets) │ │
+│ └──────────┘ └──────────┘ └──────────┘ └──────────┘ │
+└─────────────────────────────────────────────────────────────┘
+│
+▼
+┌─────────────────────────────────────────────────────────────┐
+│ EXTERNAL APIS │
+│ OpenWeatherMap · IMD · Google Maps · MyMemory · AGMARKNET │
+└─────────────────────────────────────────────────────────────┘
 
 ---
 
@@ -171,9 +374,7 @@ text
 
 - **Long-press** red button → 3-second countdown
 - Opens device SMS app with pre-filled message:
-🚨 EMERGENCY: [Name] needs help at [Google Maps link with GPS coordinates]. Contact: [phone]
-
-text
+- 🚨 EMERGENCY: [Name] needs help at [Google Maps link with GPS coordinates]. Contact: [phone]
 - Also opens dialer with **112** (national emergency) pre-filled
 - **Test mode:** Toggle in settings → SMS goes to YOUR number instead of contacts
 - **No Twilio needed**—uses device's native SMS app
@@ -217,8 +418,6 @@ Severe cyclonic storm expected in next 48 hours. Wind speeds up to 120 km/h.
 Affected: Coastal Odisha, West Bengal
 Actions: Evacuate low-lying areas, secure livestock, store emergency supplies
 Source: IMD
-
-text
 
 ### 📊 Analytics Dashboard
 
@@ -297,58 +496,6 @@ text
 
 ---
 
-## 📊 Architecture
-┌─────────────────────────────────────────────────────────────┐
-│ FLUTTER MOBILE APP │
-│ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ │
-│ │ Chat │ │ Map │ │Dashboard │ │ Profile │ │
-│ │ UI │ │ UI │ │ UI │ │ UI │ │
-│ └──────────┘ └──────────┘ └──────────┘ └──────────┘ │
-│ │
-│ ┌──────────────────────────────────────────────────────┐ │
-│ │ STATE MANAGEMENT (Provider) │ │
-│ └──────────────────────────────────────────────────────┘ │
-│ │
-│ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ │
-│ │ TTS/STT │ │ SOS │ │ Crop │ │ Local │ │
-│ │ Engine │ │ Module │ │ Engine │ │ DB │ │
-│ └──────────┘ └──────────┘ └──────────┘ └──────────┘ │
-└─────────────────────────────────────────────────────────────┘
-│
-│ HTTPS / WebSocket
-▼
-┌─────────────────────────────────────────────────────────────┐
-│ BACKEND SERVICES │
-│ ┌──────────────────────────────────────────────────────┐ │
-│ │ API GATEWAY (FastAPI) │ │
-│ │ Rate Limiting · Authentication · Routing │ │
-│ └──────────────────────────────────────────────────────┘ │
-│ │
-│ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ │
-│ │ Weather │ │ Crop │ │ AI │ │ Alert │ │
-│ │ Service │ │ Service │ │ Service │ │ Service │ │
-│ └──────────┘ └──────────┘ └──────────┘ └──────────┘ │
-└─────────────────────────────────────────────────────────────┘
-│
-▼
-┌─────────────────────────────────────────────────────────────┐
-│ DATA LAYER │
-│ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ │
-│ │PostgreSQL│ │ Redis │ │ Firebase │ │ S3 │ │
-│ │ (Main) │ │ (Cache) │ │(FCM/ML) │ │(Assets) │ │
-│ └──────────┘ └──────────┘ └──────────┘ └──────────┘ │
-└─────────────────────────────────────────────────────────────┘
-│
-▼
-┌─────────────────────────────────────────────────────────────┐
-│ EXTERNAL APIS │
-│ OpenWeatherMap · IMD · Google Maps · MyMemory · AGMARKNET │
-└─────────────────────────────────────────────────────────────┘
-
-text
-
----
-
 ## 🎯 Impact
 
 ### Target Users
@@ -410,10 +557,8 @@ flutter test
 pip freeze > requirements.txt
 ```
 
-2. **Create Procfile:**
+2. **Create ProCfile:**
 web: uvicorn app.main:app --host 0.0.0.0 --port $PORT
-
-text
 
 3. **Push to GitHub:**
 ```bash
@@ -440,27 +585,6 @@ flutter build apk --release --split-per-abi
    - Firebase Console → App Distribution → Upload APK
    - Add tester emails (judges)
    - Share download link
-
----
-
-## 🎬 Demo Video
-
-**5-Minute Demo Script:**
-
-| Time | Section | What to Show |
-|------|---------|--------------|
-| 0:00–0:30 | Onboarding | Language selection → Location permission |
-| 0:30–1:00 | Home Screen | Weather dashboard (32°C, partly cloudy) |
-| 1:00–1:30 | Chat | Ask in Hindi → Get Hindi response (text + voice) |
-| 1:30–2:00 | Offline Mode | Turn off WiFi → Show cached data |
-| 2:00–2:30 | SOS | Long-press → SMS with location link |
-| 2:30–3:00 | Crops | Select wheat → Flowering stage → Advisory |
-| 3:00–3:30 | Schemes | PM-KISAN → Apply link |
-| 3:30–4:00 | Alerts | Heat wave alert (orange card) |
-| 4:00–4:30 | Analytics | Tap Settings 5× → PIN 1234 → Stats |
-| 4:30–5:00 | Demo Mode | Tap version 7× → Mock data banner |
-
-**Upload:** YouTube (unlisted) or Google Drive
 
 ---
 
@@ -513,201 +637,7 @@ git push origin <your-branch-name>
 |-----|------|-------|
 | Day 1 | 30 Aug 2026 | Kickoff, study PS68 spec, task allocation, environment setup |
 | Day 2–6 | 31 Aug – 5 Sep 2026 | Core development sprint—NLP pipeline, weather data integration, chat UI, alerts |
-| Day 7 | 6 Sep 2026 | Final Presentation (Round 1) |
-| **Round 2** | **2-4 weeks later** | **Live deployment + real users (100-1,000 farmers)** |
-| **Round 3** | **1-2 months later** | **10K+ users, revenue, govt partnerships** |
-
----
-
-## 🚀 ROUND 2 PREPARATION (2-4 Weeks After Round 1)
-
-### What Judges Expect in Round 2:
-1. **Live deployment** (not just localhost)
-2. **Real users** (100-1,000 farmers using app)
-3. **User feedback** (testimonials, ratings, retention metrics)
-4. **Improved features** (based on Round 1 feedback)
-5. **Better demo** (more polished, more impact metrics)
-
-### Technical Changes for Round 2:
-
-#### 1. DEPLOY TO PRODUCTION (Priority: CRITICAL)
-
-**Backend:** Move from Render free tier to paid tier
-```bash
-# Option A: Render Pro ($7/month)
-- 2 GB RAM (4x more)
-- 1 CPU → 2 CPUs (2x more)
-- 100 GB bandwidth/month
-- Auto-scaling to 2 instances
-
-# Option B: DigitalOcean App Platform ($12/month)
-- 2 GB RAM
-- 1 CPU
-- 3 TB bandwidth/month
-- Better uptime than Render
-
-# Database: Supabase Pro ($25/month)
-- 50 GB database (100x more)
-- 200 connections (3x more)
-- Daily backups
-- Point-in-time recovery
-
-# Total Cost: $32/month (worth it for Round 2)
-```
-
-#### 2. ADD REDIS CACHING (Priority: HIGH)
-
-**Why:** Round 2 judges will test with 100+ concurrent users
-
-**What to Build:**
-```python
-# backend/app/services/weather_service.py
-from redis import Redis
-import json
-from datetime import timedelta
-
-redis_client = Redis.from_url(
-    os.getenv("REDIS_URL"),  # Redis Cloud free tier (30 MB)
-    decode_responses=True
-)
-
-def get_weather(lat: float, lon: float):
-    # Check Redis cache first
-    cache_key = f"weather:{lat}:{lon}"
-    cached = redis_client.get(cache_key)
-    
-    if cached:
-        return json.loads(cached)  # Instant response (~10ms)
-    
-    # Cache miss → fetch from OpenWeatherMap API (~200ms)
-    weather_data = openweathermap_api.get_weather(lat, lon)
-    
-    # Store in Redis (5-min TTL)
-    redis_client.setex(
-        cache_key,
-        timedelta(minutes=5),
-        json.dumps(weather_data)
-    )
-    
-    return weather_data
-```
-
-**Impact:**
-- Latency: 200-500ms → 10-50ms (90% reduction)
-- API calls: 100% → 10% (90% reduction in OpenWeatherMap costs)
-- Can handle: 10K users → 100K users (10x more)
-
-#### 3. ADD LOAD BALANCER (Priority: MEDIUM)
-
-**Why:** Round 2 judges will test with 500+ concurrent users
-
-**What to Build:**
-```yaml
-# Render Load Balancer ($5/month)
-# - Go to render.com
-# - New Load Balancer
-# - Add 2 backend instances as targets
-# - Configure health checks (/health endpoint)
-
-# Backend instances:
-# - Instance 1: 2 GB RAM, 1 CPU ($7/month)
-# - Instance 2: 2 GB RAM, 1 CPU ($7/month)
-# - Load Balancer: $5/month
-# Total: $19/month (vs. $7/month for single instance)
-```
-
-**Impact:**
-- Can handle: 50K users → 200K users (4x more)
-- Uptime: 99% → 99.9% (10x more reliable)
-- Zero downtime deployments
-
-#### 4. ADD WHATSAPP INTEGRATION (Priority: HIGH)
-
-**Why:** Round 1 judges said "farmers use WhatsApp, not apps"
-
-**What to Build:**
-```python
-# backend/app/services/whatsapp_service.py
-from twilio.rest import Client
-
-class WhatsAppService:
-    def __init__(self):
-        self.client = Client(
-            os.getenv("TWILIO_ACCOUNT_SID"),
-            os.getenv("TWILIO_AUTH_TOKEN")
-        )
-    
-    async def send_weather_alert(self, phone: str, alert: dict):
-        message = f"""
-🚨 Weather Alert
-
-{alert['title']}
-{alert['description']}
-
-Stay safe! 🙏
-        """
-        
-        await self.client.messages.create(
-            from_='whatsapp:+14155238886',  # Twilio sandbox
-            to=f'whatsapp:+91{phone}',
-            body=message,
-        )
-```
-
-**Cost:** Twilio free tier ($15 credit, ~500 WhatsApp messages)
-
-**Impact:**
-- Farmers get alerts on WhatsApp (their preferred channel)
-- Shows you listened to Round 1 feedback
-- +1 point (Innovation)
-
-#### 5. ADD USER FEEDBACK SYSTEM (Priority: HIGH)
-
-**Why:** Round 2 judges will ask "what did farmers say?"
-
-**What to Build:**
-```dart
-// lib/features/feedback/screens/feedback_screen.dart
-// - Star rating (1-5 stars)
-// - Text feedback (optional)
-// - Submit button → sends to backend
-
-// backend/app/api/feedback.py
-@app.post("/api/v1/feedback")
-async def submit_feedback(user_id: str, rating: int, comment: str):
-    # Save to database
-    pass
-
-@app.get("/api/v1/feedback/stats")
-async def get_feedback_stats():
-    # Return: average rating, total feedback, common themes
-    return {
-        "average_rating": 4.5,
-        "total_feedback": 247,
-        "common_themes": ["easy to use", "helpful alerts", "good offline mode"]
-    }
-```
-
-**Impact:**
-- Round 2 judges: "What did farmers say?"
-- You: "Average rating: 4.5/5 from 247 farmers. Common themes: easy to use, helpful alerts, good offline mode."
-- **Instant credibility boost**
-
----
-
-## 🏆 ROUND 2 SCORE PROJECTION
-
-| Criterion | Round 1 Score | Round 2 Score (With Changes) | Improvement |
-|-----------|---------------|------------------------------|-------------|
-| **Innovation** | 24/25 | 25/25 | +1 (WhatsApp + Market Prices) |
-| **Technical Implementation** | 24/25 | 25/25 | +1 (Redis + Load Balancer) |
-| **User Experience** | 18/20 | 20/20 | +2 (GIS Map + better latency) |
-| **Impact & Scalability** | 19/20 | 20/20 | +1 (Real users + analytics) |
-| **Presentation** | 9/10 | 10/10 | +1 (Better demo + user testimonials) |
-| **TOTAL** | **94/100** | **100/100** | **+6 points** |
-
-**Round 2 Percentile:** **Top 0.01%** (almost guaranteed SIH Overall Winner)
-
+| Day 7 | 8 Sep 2026 | Final Presentation (Round 1) |
 ---
 
 ## 📄 License
