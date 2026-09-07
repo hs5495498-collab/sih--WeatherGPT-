@@ -112,69 +112,62 @@ OPENWEATHER_API_KEY=your_openweathermap_key
 ## 📁 Folder Structure
 ### Backend Structure
 weathergpt-backend-v3/
-├── .env.example                    # ✅ FIXED (RAG_ENABLED=false, all vars complete)
-├── .gitignore                      # ✅ Present
-├── Procfile                        # ✅ Present (uvicorn app.main:app --host 0.0.0.0 --port $PORT)
-├── railway.json                    # ✅ Present (Render deployment config)
-├── requirements.txt                # ✅ FIXED (google-genai removed)
-├── pytest.ini                      # ✅ Present
-│
+├── .env.example
+├── .gitignore
+├── Procfile
+├── railway.json
+├── requirements.txt
+├── pytest.ini
 ├── app/
-│   ├── main.py                     # ✅ FastAPI app, CORS, router wiring, lifespan
-│   ├── state.py                    # ✅ FIXED (unused imports removed)
-│   │
+│   ├── main.py
+│   ├── state.py
 │   ├── core/
-│   │   ├── config.py               # ✅ Settings (pydantic-settings, reads .env)
-│   │   ├── exceptions.py           # ✅ AppException
-│   │   ├── exception_handlers.py   # ✅ Centralized error responses
-│   │   ├── logging_config.py       # ✅ Logging configuration
-│   │   └── middleware.py           # ✅ Request logging middleware
-│   │
+│   │   ├── config.py
+│   │   ├── exceptions.py
+│   │   ├── exception_handlers.py
+│   │   ├── logging_config.py
+│   │   └── middleware.py
 │   ├── dependencies/
-│   │   └── auth.py                 # ✅ get_current_user (Supabase bearer token)
-│   │
-│   ├── routers/                    # ✅ 11 HTTP endpoints (all working)
-│   │   ├── advisory.py             # GET /api/v1/advisory
-│   │   ├── alerts.py               # GET /api/v1/alerts
-│   │   ├── auth.py                 # POST /api/v1/auth/signup, /login
-│   │   ├── chat.py                 # POST /api/v1/chat
-│   │   ├── database.py             # GET /api/v1/database/test
-│   │   ├── domain_advisory.py      # GET /api/v1/domain-advisory
-│   │   ├── history.py              # GET/DELETE /api/v1/history/{session_id}
-│   │   ├── location.py             # location search
-│   │   ├── risk.py                 # GET /api/v1/risk
-│   │   ├── user_locations.py       # saved locations (auth-gated)
-│   │   ├── weather.py              # /current, /forecast, /by-city
-│   │   └── websocket.py            # WS /ws/weather-alerts
-│   │
-│   ├── services/                   # ✅ 20 business logic services (all working)
+│   │   └── auth.py
+│   ├── routers/
+│   │   ├── advisory.py
+│   │   ├── alerts.py
+│   │   ├── auth.py
+│   │   ├── chat.py
+│   │   ├── database.py
+│   │   ├── domain_advisory.py
+│   │   ├── history.py
+│   │   ├── location.py
+│   │   ├── risk.py
+│   │   ├── user_locations.py
+│   │   ├── weather.py
+│   │   └── websocket.py
+│   ├── services/
 │   │   ├── advisory_service.py
-│   │   ├── alert_poller.py         # background loop pushing live alerts
+│   │   ├── alert_poller.py
 │   │   ├── alert_service.py
 │   │   ├── auth_service.py
 │   │   ├── aviation_advisory_service.py
-│   │   ├── chat_orchestrator.py    # central NLU→route→response pipeline
+│   │   ├── chat_orchestrator.py
 │   │   ├── domain_advisory_service.py
 │   │   ├── farmer_advisory_service.py
 │   │   ├── history_service.py
 │   │   ├── intent_router_service.py
-│   │   ├── location_service.py     # Open-Meteo geocoding
+│   │   ├── location_service.py
 │   │   ├── marine_advisory_service.py
-│   │   ├── nlu_service.py          # rule-based intent/location/time extraction
-│   │   ├── notification_service.py # fan-out: websocket/email/sms/push
+│   │   ├── nlu_service.py
+│   │   ├── notification_service.py
 │   │   ├── outdoor_advisory_service.py
 │   │   ├── response_generator_service.py
-│   │   ├── risk_service.py         # heat/rain/wind/flood scoring
+│   │   ├── risk_service.py
 │   │   ├── saved_location_service.py
-│   │   ├── translation_service.py  # MyMemory API wrapper
-│   │   ├── weather_service.py      # Open-Meteo forecast client
-│   │   └── websocket_manager.py    # connection registry by city
-│   │
-│   ├── repositories/               # ✅ 2 Supabase data-access layers (async-safe)
-│   │   ├── chat_repository.py      # FIXED (wrapped in run_in_threadpool)
-│   │   └── saved_location_repository.py  # FIXED (wrapped in run_in_threadpool)
-│   │
-│   ├── schemas/                    # ✅ 7 Pydantic request/response models
+│   │   ├── translation_service.py
+│   │   ├── weather_service.py
+│   │   └── websocket_manager.py
+│   ├── repositories/
+│   │   ├── chat_repository.py
+│   │   └── saved_location_repository.py
+│   ├── schemas/
 │   │   ├── alert.py
 │   │   ├── auth.py
 │   │   ├── chat.py
@@ -182,66 +175,57 @@ weathergpt-backend-v3/
 │   │   ├── location.py
 │   │   ├── saved_location.py
 │   │   └── weather.py
-│   │
 │   ├── models/
-│   │   └── schemas.py              # FIXED (id coercion: int→str)
-│   │
+│   │   └── schemas.py
 │   └── utils/
 │       ├── helpers.py
-│       ├── time_utils.py           # "tomorrow"/"today" → ISO date
-│       └── weather_codes.py        # WMO code → condition/icon
-│
+│       ├── time_utils.py
+│       └── weather_codes.py
 ├── database/
-│   └── supabase.py                 # client init, graceful no-op if unconfigured
-│
+│   └── supabase.py
 └── tests/
-    ├── conftest.py                 # fixtures: TestClient, mock weather/location data
+    ├── conftest.py
     ├── test_alerts.py
     ├── test_chat.py
     ├── test_location.py
     ├── test_risk.py
-    └── test_weather.py             # ✅ 59 tests passing
+    └── test_weather.py
 ### Frontend Structure
 weathergpt-flutter-v3/
-├── pubspec.yaml                      # ✅ Present (all dependencies declared)
-│
+├── pubspec.yaml
 └── lib/
-    ├── main.dart                     # ✅ entrypoint, MultiProvider wiring
-    │
+    ├── main.dart
     ├── core/
-    │   └── languages.dart            # ✅ supported languages, voice-guidance scripts
-    │
+    │   └── languages.dart
     ├── data/
-    │   └── government_schemes.dart   # ✅ static scheme content (10 schemes)
-    │
-    ├── models/                       # ✅ 6 plain data classes + defensive fromJson
+    │   └── government_schemes.dart
+    ├── models/
     │   ├── chat_message.dart
     │   ├── market_price.dart
     │   ├── scheme.dart
     │   ├── sos_models.dart
     │   ├── weather_alert.dart
     │   └── weather_data.dart
-    │
-    ├── providers/                    # ✅ 8 ChangeNotifier state, one per concern
+    ├── providers/
     │   ├── app_settings_provider.dart
-    │   ├── auth_provider.dart        # wraps Supabase auth state
-    │   ├── chat_provider.dart        # chat history, voice, vision integration
+    │   ├── auth_provider.dart
+    │   ├── chat_provider.dart
     │   ├── connectivity_provider.dart
     │   ├── navigation_provider.dart
-    │   ├── weather_provider.dart     # current weather + alerts orchestration
+    │   ├── weather_provider.dart
     │   └── weather_theme_provider.dart
-    │
-    ├── screens/                      # ✅ 20 screens (all working)
-    │   ├── auth/login_screen.dart
+    ├── screens/
+    │   ├── auth/
+    │   │   └── login_screen.dart
     │   ├── alerts_dashboard_screen.dart
     │   ├── analytics_dashboard_screen.dart
     │   ├── app_drawer.dart
     │   ├── chat_screen.dart
     │   ├── dashboard_screen.dart
-    │   ├── home_shell.dart           # bottom-nav shell
+    │   ├── home_shell.dart
     │   ├── market_prices_screen.dart
     │   ├── onboarding_screen.dart
-    │   ├── persona_advisory_screen.dart  # farmer/marine/aviation/urban advisories
+    │   ├── persona_advisory_screen.dart
     │   ├── scheme_detail_screen.dart
     │   ├── schemes_list_screen.dart
     │   ├── settings_screen.dart
@@ -250,29 +234,26 @@ weathergpt-flutter-v3/
     │   ├── sos_screen.dart
     │   ├── splash_screen.dart
     │   └── weather_map_screen.dart
-    │
-    ├── services/                     # ✅ 17 I/O services (no widget code)
+    ├── services/
     │   ├── analytics_service.dart
-    │   ├── api_client.dart           # talks to the FastAPI backend
-    │   ├── cache_service.dart        # SharedPreferences offline fallback
+    │   ├── api_client.dart
+    │   ├── cache_service.dart
     │   ├── demo_mode_service.dart
-    │   ├── geocoding_service.dart    # Nominatim search + reverse geocode
+    │   ├── geocoding_service.dart
     │   ├── input_sanitizer.dart
-    │   ├── location_service.dart     # GPS via geolocator
+    │   ├── location_service.dart
     │   ├── market_price_service.dart
-    │   ├── mock_data_service.dart    # offline/demo fallback data
+    │   ├── mock_data_service.dart
     │   ├── radar_tile_service.dart
-    │   ├── rate_limiter.dart         # client-side chat rate limiting
-    │   ├── sos_service.dart          # SMS/call handoff for emergencies
-    │   ├── supabase_service.dart     # Supabase client init
-    │   ├── vision_inference_service.dart  # on-device sky-photo classifier (tflite)
-    │   └── voice_service.dart        # STT/TTS
-    │
+    │   ├── rate_limiter.dart
+    │   ├── sos_service.dart
+    │   ├── supabase_service.dart
+    │   ├── vision_inference_service.dart
+    │   └── voice_service.dart
     ├── theme/
     │   ├── app_theme.dart
     │   └── weather_theme_spec.dart
-    │
-    └── widgets/                      # ✅ 14 reusable UI components
+    └── widgets/
         ├── alert_banner.dart
         ├── animated_counter.dart
         ├── animated_weather_icon.dart
