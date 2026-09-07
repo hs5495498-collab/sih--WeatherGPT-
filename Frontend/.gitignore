@@ -1,3 +1,17 @@
+﻿# ==========================================================
+# WeatherGPT — Frontend/.gitignore
+# Consolidated: replaces android/, ios/, linux/, macos/,
+# windows/ nested .gitignore files.
+# ==========================================================
+
+# Secrets — never commit these
+.env
+.env.*
+*.pem
+*.key
+secrets.json
+service-account*.json
+
 # Miscellaneous
 *.class
 *.log
@@ -12,79 +26,93 @@
 .swiftpm/
 migrate_working_dir/
 
-# IntelliJ related
+# IDE / editor
 *.iml
 *.ipr
 *.iws
 .idea/
 
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
-#.vscode/
-
-# Flutter/Dart/Pub related
+# Flutter / Dart / Pub
 **/doc/api/
 **/ios/Flutter/.last_build_id
 .dart_tool/
+.flutter-plugins
 .flutter-plugins-dependencies
 .pub-cache/
 .pub/
 /build/
 /coverage/
-
-# Symbolication related
 app.*.symbols
-
-# Obfuscation related
 app.*.map.json
+.widget_preview/
 
-# Android Studio will place build artifacts here
+# ===================== ANDROID =====================
+android/**/gradle-wrapper.jar
+android/.gradle
+android/captures/
+android/gradlew
+android/gradlew.bat
+android/local.properties
+android/**/GeneratedPluginRegistrant.java
+android/**/.cxx/
+android/build/
+android/**/key.properties
+android/**/*.keystore
+android/**/*.jks
 /android/app/debug
 /android/app/profile
 /android/app/release
 
-# Widget Preview related
-.widget_preview/
-# Secrets — never commit these
-.env
-.env.*
-*.pem
-*.key
-secrets.json
-service-account*.json
+# ===================== iOS =====================
+ios/**/dgph
+ios/**/*.mode1v3
+ios/**/*.mode2v3
+ios/**/*.moved-aside
+ios/**/*.pbxuser
+ios/**/*.perspectivev3
+ios/**/*sync/
+ios/**/.sconsign.dblite
+ios/**/.tags*
+ios/**/.vagrant/
+ios/**/DerivedData/
+ios/**/Icon?
+ios/**/Pods/
+ios/**/.symlinks/
+ios/**/profile
+ios/**/xcuserdata
+ios/**/.generated/
+ios/Flutter/App.framework
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/Flutter/Generated.xcconfig
+ios/Flutter/ephemeral/
+ios/Flutter/app.flx
+ios/Flutter/app.zip
+ios/Flutter/flutter_assets/
+ios/Flutter/flutter_export_environment.sh
+ios/ServiceDefinitions.json
+ios/Runner/GeneratedPluginRegistrant.*
+!ios/**/default.mode1v3
+!ios/**/default.mode2v3
+!ios/**/default.pbxuser
+!ios/**/default.perspectivev3
 
-# Python
-__pycache__/
-*.py[cod]
-*.egg-info/
-.venv/
-venv/
-env/
-.pytest_cache/
-.mypy_cache/
-.ipynb_checkpoints/
+# ===================== LINUX =====================
+linux/flutter/ephemeral/
 
-# ML artifacts
-*.ckpt
-*.pth
-*.h5
-*.pkl
-*.joblib
-mlruns/
-wandb/
+# ===================== MACOS =====================
+macos/**/Flutter/ephemeral/
+macos/**/Pods/
+macos/**/dgph
+macos/**/xcuserdata/
 
-# Databases / logs
-*.db
-*.sqlite3
-*.log
-
-# OS / editor
-.DS_Store
-Thumbs.db
-.vscode/
-.idea/
-*.iml
-
-# Node (if any tooling)
-node_modules/
+# ===================== WINDOWS =====================
+windows/flutter/ephemeral/
+windows/**/*.suo
+windows/**/*.user
+windows/**/*.userosscache
+windows/**/*.sln.docstates
+windows/**/x64/
+windows/**/x86/
+windows/**/*.[Cc]ache
+!windows/**/*.[Cc]ache/
