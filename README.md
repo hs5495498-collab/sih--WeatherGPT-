@@ -642,9 +642,8 @@ MIT License — see [LICENSE](LICENSE) file for details.
 
 ## 📞 Contact
 
-- **GitHub**: https://github.com/yourteam/weathergpt
-- **Email**: team@weathergpt.in
-- **Demo Video**: [YouTube/Drive link]
+- **GitHub**: [https://github.com/yourteam/weathergpt](https://github.com/hs5495498-collab/sih--WeatherGPT-)
+- **Email**: hs5495498@gmail.com
 - **Pitch Deck**: [Google Slides/PPT link]
 
 ---
