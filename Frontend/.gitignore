@@ -46,3 +46,45 @@ app.*.map.json
 
 # Widget Preview related
 .widget_preview/
+# Secrets — never commit these
+.env
+.env.*
+*.pem
+*.key
+secrets.json
+service-account*.json
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+
+# ML artifacts
+*.ckpt
+*.pth
+*.h5
+*.pkl
+*.joblib
+mlruns/
+wandb/
+
+# Databases / logs
+*.db
+*.sqlite3
+*.log
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.iml
+
+# Node (if any tooling)
+node_modules/
